@@ -92,6 +92,8 @@ const handleSubmit = () => {
       .then((response: AxiosResponse<string>) => {
         event('contact')
         messageApi.success(response.data, 2);
+        Object.assign(values, defaultValues);
+        Object.assign(errors, defaultErrors);
         setTimeout(() => {
           loadingState.value = false;
         }, 1000);

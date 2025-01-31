@@ -112,26 +112,32 @@ cd backend
 cp .env.example .env
 ```
 
-#### 3. Install PHP dependencies using Composer: (only if running locally)
+#### 3. Make new directories for the named volumes:
+
+```bash
+mkdir vendor
+```
+
+#### 4. Install PHP dependencies using Composer: (only if running locally)
 
 ```bash
 composer install
 ```
   
-#### 4. Generate a new application & JWT key: (only if running locally)
+#### 5. Generate a new application & JWT key: (only if running locally)
 
 ```bash
 php artisan key:generate
 php artisan jwt:secret
 ```
   
-#### 5. Run database migrations: (only if running locally)
+#### 6. Run database migrations: (only if running locally)
 
 ```bash
 php artisan migrate
 ```
   
-#### 6. Start the Laravel development server: (only if running locally)
+#### 7. Start the Laravel development server: (only if running locally)
 
 ```bash
 php artisan serve

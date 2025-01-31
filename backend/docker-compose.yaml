@@ -24,7 +24,7 @@ services:
       - MAIL_HOST=mailhog  
     volumes:
       - .:/usr/src/myapp
-    #   - backend-vendor:/usr/src/myapp/vendor 
+      - backend-vendor:/usr/src/myapp/vendor 
     #   - backend-storage:/usr/src/myapp/storage  
     networks:
       - app-network
@@ -60,7 +60,7 @@ services:
 
 volumes:
   postgres-db:
-  # backend-vendor:
+  backend-vendor:
   # backend-storage:
     
 networks:
