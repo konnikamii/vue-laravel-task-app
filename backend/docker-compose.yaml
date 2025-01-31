@@ -1,0 +1,68 @@
+name: laravel-task-app
+services:
+  backend:
+    image: laravel-task-app/backend:latest
+    container_name: backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+      - mailhog
+    restart: unless-stopped
+    tty: true
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env
+    environment:  
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=laravelTest
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=qwerty123  
+      - MAIL_HOST=mailhog  
+    volumes:
+      - .:/usr/src/myapp
+    #   - backend-vendor:/usr/src/myapp/vendor 
+    #   - backend-storage:/usr/src/myapp/storage  
+    networks:
+      - app-network
+
+  postgres: 
+    image: postgres
+    container_name: postgres 
+    restart: unless-stopped 
+    environment:
+      POSTGRES_DB: laravelTest
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: qwerty123
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+
+    networks:
+      - app-network 
+
+
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    restart: unless-stopped
+    ports:
+      - 8025:8025
+      - 1025:1025
+    networks:
+      - app-network
+
+
+volumes:
+  postgres-db:
+  # backend-vendor:
+  # backend-storage:
+    
+networks:
+  app-network:
+    driver: bridge

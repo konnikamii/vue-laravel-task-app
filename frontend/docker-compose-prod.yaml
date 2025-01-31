@@ -1,0 +1,20 @@
+services:
+
+  frontend:
+    image: frontend
+    container_name: frontend
+    restart: unless-stopped 
+    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - 7000:7000    
+    env_file: 
+     - ./.env  
+    environment:
+     - RUN_ON_DOCKER=on
+     - BACKEND_HOST=backend
+     - VITE_BACKEND_HOST=backend
+     - VITE_MODE=production 
+ 

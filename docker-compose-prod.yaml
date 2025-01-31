@@ -1,0 +1,83 @@
+name: ${APP_NAME}
+services: 
+  frontend:
+    image: ${APP_NAME}/frontend:latest
+    container_name: frontend-prod
+    restart: unless-stopped 
+    tty: true
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    ports:
+      - 7000:7000     
+    env_file: 
+     - ./frontend/.env  
+    environment:
+     - RUN_ON_DOCKER=on
+     - BACKEND_HOST=localhost
+     - VITE_BACKEND_HOST=localhost
+     - VITE_MODE=production 
+    networks:
+      - app-network
+ 
+  backend:
+    image: ${APP_NAME}/backend:latest
+    container_name: backend-prod
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+      - mailhog
+    restart: unless-stopped
+    tty: true
+    ports:
+      - 8000:8000
+    env_file:
+      - ./backend/.env
+    environment:  
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=laravelTest
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=qwerty123  
+      - MAIL_HOST=mailhog  
+    networks:
+      - app-network
+  postgres:
+    image: postgres
+    container_name: postgres 
+    restart: unless-stopped  
+    environment:
+      - POSTGRES_DB=laravelTest
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=qwerty123 
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres-db:/var/lib/postgresql/data 
+    networks:
+      - app-network
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    restart: unless-stopped
+    ports:
+      - 8025:8025
+      - 1025:1025
+    networks:
+      - app-network
+
+
+volumes:
+  postgres-db: 
+  frontend-node-modules: 
+  frontend-dist: 
+  frontend-typed-router: 
+    
+
+networks:
+  app-network:
+    driver: bridge
+      
